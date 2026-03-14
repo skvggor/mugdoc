@@ -121,7 +121,7 @@ PORT="3000"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --help)
+    --domain)
       if [[ -z "${2-}" ]] || [[ "$2" == --* ]]; then
         log_error "--domain requires an argument."
         exit 1
