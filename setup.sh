@@ -115,13 +115,13 @@ print_summary() {
   echo ""
 }
 
-BASE_DOMAIN="reposito.rio.br"
+BASE_DOMAIN=""
 DEPLOY_PATH=""
 PORT="3000"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --domain)
+    --help)
       if [[ -z "${2-}" ]] || [[ "$2" == --* ]]; then
         log_error "--domain requires an argument."
         exit 1
@@ -156,13 +156,14 @@ while [[ $# -gt 0 ]]; do
       echo -e "  ${BOLD}Usage${NC}"
       echo -e "    ./setup.sh ${DIM}[options]${NC}"
       echo ""
-      echo -e "  ${BOLD}Options${NC}"
-      echo -e "    --domain ${DIM}<domain>${NC}   Base domain for site URL ${DIM}(default: reposito.rio.br)${NC}"
-      echo -e "    --deploy ${DIM}<path>${NC}     Absolute path to the project on the server."
-      echo -e "                        Generates Dockerfile, compose.yml,"
-      echo -e "                        and a GitHub Actions workflow for SSH deploy."
-      echo -e "    --port ${DIM}<number>${NC}     Container port for the docs site ${DIM}(default: 3000)${NC}"
-      echo -e "    --help               Show this help message"
+  echo -e "  ${BOLD}Options${NC}"
+  echo -e "    --domain ${DIM}<domain>${NC}   Base domain for site URL ${DIM}(required)${NC}"
+  echo -e "    --deploy ${DIM}<path>${NC}     Absolute path to the project on the server."
+  echo -e "                        Generates Dockerfile, compose.yml,"
+  echo -e "                        and a GitHub Actions workflow for SSH deploy."
+  echo -e "    --port ${DIM}<number>${NC}     Container port for the docs site"
+  echo -e "                        ${DIM}(requires --deploy, default: 3000)${NC}"
+  echo -e "    --help               Show this help message"
       echo ""
       exit 0
       ;;
@@ -172,6 +173,16 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+if [ -z "$BASE_DOMAIN" ]; then
+  log_error "--domain is required."
+  exit 1
+fi
+
+if [ -n "$PORT" ] && [ -z "$DEPLOY_PATH" ]; then
+  log_error "--port requires --deploy to be specified."
+  exit 1
+fi
 
 detect_project_name() {
   local project_name=""
