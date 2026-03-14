@@ -1,0 +1,19 @@
+services:
+  {{PROJECT_NAME}}-docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: {{PROJECT_NAME}}-docs
+    restart: unless-stopped
+    networks:
+      - caddy_net
+    labels:
+      caddy: {{PROJECT_NAME}}.{{BASE_DOMAIN}}
+      caddy.reverse_proxy: "{{upstreams {{PORT}}}}"
+      caddy.encode: "gzip"
+    expose:
+      - {{PORT}}
+
+networks:
+  caddy_net:
+    external: true

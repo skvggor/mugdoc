@@ -1,0 +1,29 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "{{DOCS_DIR}}/**"
+      - ".github/workflows/deploy-docs.yml"
+
+jobs:
+  deploy:
+    name: Deploy via SSH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT || 22 }}
+          script: |
+            cd {{DEPLOY_PATH}}
+
+            git pull origin main
+
+            docker compose -f {{DOCS_DIR}}/compose.yml down
+            docker compose -f {{DOCS_DIR}}/compose.yml up -d --build
