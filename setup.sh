@@ -305,8 +305,8 @@ apply_config_placeholders() {
   local project_name="$2"
   local base_domain="$3"
 
-  sed -i "s|{{PROJECT_NAME}}|${project_name}|g" "$file"
   sed -i "s|{{BASE_DOMAIN}}|${base_domain}|g" "$file"
+  sed -i "s|{{PROJECT_NAME}}|${project_name}|g" "$file"
 }
 
 detect_package_manager() {

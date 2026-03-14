@@ -1,5 +1,6 @@
 {
-  "name": "documentation",
+  "name": "mugdoc",
+  "description": "Generate a documentation site from your project's README using Astro and Starlight.",
   "version": "1.0.0",
   "private": true,
   "scripts": {
