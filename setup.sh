@@ -345,8 +345,7 @@ configure_deploy() {
   local base_domain="$2"
   local deploy_path="$3"
   local port="$4"
-  local docs_directory
-  docs_directory="$(basename "$SCRIPT_DIR")"
+  local docs_directory="."
 
   apply_config_placeholders "$SCRIPT_DIR/compose.yml" "$project_name" "$base_domain"
   sed -i "s|{{PORT}}|${port}|g" "$SCRIPT_DIR/compose.yml"
@@ -436,7 +435,7 @@ main() {
   rm -- "$0"
   log_success "setup.sh removed"
 
-  print_summary "$project_name" "$BASE_DOMAIN" "$(basename "$SCRIPT_DIR")" "$package_manager"
+  print_summary "$project_name" "$BASE_DOMAIN" "." "$package_manager"
 }
 
 main "$@"
