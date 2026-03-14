@@ -424,6 +424,12 @@ main() {
   fi
   log_success "Dependencies installed"
 
+  cat > "$SCRIPT_DIR/.gitignore" << 'EOF'
+node_modules
+dist
+.astro
+EOF
+
   if [ -n "$DEPLOY_PATH" ]; then
     step "Configuring deploy"
     configure_deploy "$project_name" "$BASE_DOMAIN" "$DEPLOY_PATH" "$PORT"
