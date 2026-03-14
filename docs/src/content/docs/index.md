@@ -25,11 +25,11 @@ git clone --depth 1 git@github.com:skvggor/mugdoc.git docs && rm -rf docs/.git &
 
 ### Options
 
-| Flag | Description | Default |
+| Flag | Description | Required |
 |---|---|---|
-| `--domain` | Base domain for the site URL | `reposito.rio.br` |
-| `--deploy` | Absolute path on the server to deploy via SSH | (none) |
-| `--port` | Container port for the docs site | `3000` |
+| `--domain` | Base domain for the site URL | Yes |
+| `--deploy` | Absolute path on the server to deploy via SSH | No |
+| `--port` | Container port for the docs site (requires --deploy) | No |
 
 ### Examples
 
@@ -42,13 +42,13 @@ With a custom domain:
 Deploy to a VPS:
 
 ```bash
-./docs/setup.sh --deploy /root/projects/my-project
+./docs/setup.sh --domain example.com --deploy /root/projects/my-project
 ```
 
 Deploy with custom port:
 
 ```bash
-./docs/setup.sh --deploy /root/projects/my-project --port 3001
+./docs/setup.sh --domain example.com --deploy /root/projects/my-project --port 3001
 ```
 
 After setup:
@@ -90,7 +90,7 @@ This creates:
 - `docs/compose.yml` -- Docker Compose service with [caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-proxy) labels for automatic HTTPS
 - `.github/workflows/deploy-docs.yml` -- GitHub Actions workflow that deploys via SSH on push to `main`
 
-The site URL is `https://{project-name}.{domain}` (e.g. `https://my-project.reposito.rio.br`).
+The site URL is `https://{project-name}.{domain}`.
 
 The workflow uses [appleboy/ssh-action](https://github.com/appleboy/ssh-action) and requires these repository secrets:
 
