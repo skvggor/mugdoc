@@ -17,13 +17,13 @@ The generated site is a single page with your README content, no sidebar, and a 
 ## Usage
 
 ```bash
-git clone --depth 1 https://github.com/skvggor/mugdoc.git docs && rm -rf docs/.git && ./docs/setup.sh
+git clone --depth 1 git@github.com:skvggor/mugdoc.git docs && rm -rf docs/.git && ./docs/setup.sh
 ```
 
 With a custom domain:
 
 ```bash
-git clone --depth 1 https://github.com/skvggor/mugdoc.git docs && rm -rf docs/.git && ./docs/setup.sh --domain example.com
+git clone --depth 1 git@github.com:skvggor/mugdoc.git docs && rm -rf docs/.git && ./docs/setup.sh --domain example.com
 ```
 
 After setup:
