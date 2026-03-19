@@ -358,7 +358,8 @@ configure_deploy() {
 
   local workflow_dir="$PROJECT_ROOT/.github/workflows"
   mkdir -p "$workflow_dir"
-  mv "$workflow_file" "$workflow_dir/deploy-docs.yml"
+  cp "$workflow_file" "$workflow_dir/deploy-docs.yml"
+  rm "$workflow_file"
   log_success "GitHub Actions workflow"
 
   log_success "Dockerfile + compose.yml"
