@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "{{DOCS_DIR}}/**"
+      - "docs/**"
       - ".github/workflows/deploy-docs.yml"
 
 jobs:
@@ -21,9 +21,19 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT || 22 }}
           script: |
-            cd {{DEPLOY_PATH}}
+            bash -c '
+            REPO_URL="git@github.com:${{ github.repository }}.git"
+            DEPLOY_PATH="{{DEPLOY_PATH}}"
 
-            git pull origin main
+            if [ ! -d "$DEPLOY_PATH" ]; then
+              git clone --depth 1 "$REPO_URL" "$DEPLOY_PATH"
+            fi
 
-            docker compose -f {{DOCS_DIR}}/compose.yml down
+            cd "$DEPLOY_PATH"
+
+            git fetch origin main
+            git reset --hard origin/main
+
+            docker compose -f {{DOCS_DIR}}/compose.yml down || true
             docker compose -f {{DOCS_DIR}}/compose.yml up -d --build
+            '
