@@ -1,18 +1,18 @@
 services:
-  {{PROJECT_NAME}}-docs:
+  mugdoc-docs:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: {{PROJECT_NAME}}-docs
+    container_name: mugdoc-docs
     restart: unless-stopped
     networks:
       - caddy_net
     labels:
-      caddy: {{PROJECT_NAME}}.{{BASE_DOMAIN}}
-      caddy.reverse_proxy: "{{upstreams {{PORT}}}}"
+      caddy: mugdoc.reposito.rio.br
+      caddy.reverse_proxy: "{{upstreams 3010}}"
       caddy.encode: "gzip"
     expose:
-      - {{PORT}}
+      - 3010
 
 networks:
   caddy_net:
