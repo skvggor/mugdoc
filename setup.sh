@@ -215,7 +215,7 @@ extract_description() {
   local description=""
 
   if [ -f "$PROJECT_ROOT/README.md" ]; then
-    description=$(sed -e 's/^[[:space:]]*//' "$PROJECT_ROOT/README.md" | grep -v '^#' | grep -v '^<' | grep -v '^\[' | grep -v '^```' | grep -v '^$' | head -1 | sed 's/[[:space:]]*$//')
+    description=$(sed -e 's/^[[:space:]]*//' "$PROJECT_ROOT/README.md" | grep -v '^#' | grep -v '^<' | grep -v '<[a-zA-Z]' | grep -v '^\[' | grep -v '^```' | grep -v '^$' | head -1 | sed -e 's/[[:space:]]*$//' -e 's/\[\([^]]*\)\]([^)]*)/ \1/g' -e 's/  */ /g' -e 's/^ //' -e 's/"/\\"/g')
   fi
 
   if [ -z "$description" ] && [ -f "$PROJECT_ROOT/package.json" ]; then
