@@ -34,6 +34,6 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
 
-            docker compose -f docs/compose.yml down || true
-            docker compose -f docs/compose.yml up -d --build
+            docker compose -f {{DOCS_DIR}}/compose.yml down || true
+            docker compose -f {{DOCS_DIR}}/compose.yml up -d --build
             '
