@@ -21,6 +21,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT || 22 }}
           script: |
+            bash -c '
             REPO_URL="git@github.com:${{ github.repository }}.git"
             DEPLOY_PATH="{{DEPLOY_PATH}}"
 
@@ -35,3 +36,4 @@ jobs:
 
             docker compose -f docs/compose.yml down || true
             docker compose -f docs/compose.yml up -d --build
+            '
