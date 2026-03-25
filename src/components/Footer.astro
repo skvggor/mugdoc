@@ -1,10 +1,17 @@
 ---
 import Default from "@astrojs/starlight/components/Footer.astro";
+import { siteConfig } from "../site-config";
 ---
 
 <Default><slot /></Default>
 <footer class="mugdoc-footer">
   <p>
+    {siteConfig?.originalRepo && (
+      <span>
+        <a href={siteConfig.originalRepo}>Source code</a>
+        {" · "}
+      </span>
+    )}
     made with <a href="https://github.com/skvggor/mugdoc">mugdoc</a> and
     <span aria-label="love" role="img">&hearts;</span>
   </p>
