@@ -118,6 +118,7 @@ print_summary() {
 BASE_DOMAIN=""
 DEPLOY_PATH=""
 PORT="3000"
+ORIGINAL_REPO=""
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -149,6 +150,14 @@ while [[ $# -gt 0 ]]; do
       PORT="$2"
       shift 2
       ;;
+    --repo)
+      if [[ -z "${2-}" ]] || [[ "$2" == --* ]]; then
+        log_error "--repo requires an argument (e.g. https://github.com/user/repo)."
+        exit 1
+      fi
+      ORIGINAL_REPO="$2"
+      shift 2
+      ;;
     --help)
       echo ""
       echo -e "  ${MAGENTA}${BOLD}mugdoc${NC} ${DIM}\xe2\x94\x80 generate docs from your README${NC}"
@@ -163,6 +172,8 @@ while [[ $# -gt 0 ]]; do
   echo -e "                        and a GitHub Actions workflow for SSH deploy."
   echo -e "    --port ${DIM}<number>${NC}     Container port for the docs site"
   echo -e "                        ${DIM}(requires --deploy, default: 3000)${NC}"
+  echo -e "    --repo ${DIM}<url>${NC}        URL to the original repository"
+  echo -e "                        ${DIM}(e.g. https://github.com/user/repo)${NC}"
   echo -e "    --help               Show this help message"
       echo ""
       exit 0
@@ -320,6 +331,20 @@ apply_config_placeholders() {
   sed -i "s|{{PROJECT_NAME}}|${project_name}|g" "$file"
 }
 
+generate_site_config() {
+  local original_repo="$1"
+  local config_file="$SCRIPT_DIR/src/site-config.ts"
+
+  if [ -n "$original_repo" ]; then
+    cat > "$config_file" << EOF
+export const siteConfig = {
+  originalRepo: "${original_repo}",
+};
+EOF
+    log_success "Site config generated"
+  fi
+}
+
 detect_package_manager() {
   if command -v pnpm &>/dev/null; then
     echo "pnpm"
@@ -404,6 +429,7 @@ main() {
   step "Configuring site"
   apply_config_placeholders "$SCRIPT_DIR/astro.config.mjs" "$project_name" "$BASE_DOMAIN"
   log_success "astro.config.mjs"
+  generate_site_config "$ORIGINAL_REPO"
 
   step "Generating documentation"
   generate_index "$project_name" "$description"
