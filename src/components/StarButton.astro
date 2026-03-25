@@ -1,0 +1,48 @@
+---
+import { siteConfig } from "../site-config";
+---
+
+{siteConfig?.originalRepo && (
+  <a 
+    href={siteConfig.originalRepo} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="star-button"
+    aria-label="Star on GitHub"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+    </svg>
+    <span>Star on GitHub</span>
+  </a>
+)}
+
+<style>
+  .star-button {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: #24292f;
+    color: white;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+    z-index: 1000;
+  }
+
+  .star-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .star-button svg {
+    fill: #f0c14b;
+  }
+</style>
