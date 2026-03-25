@@ -1,3 +1,3 @@
 export const siteConfig = {
-  originalRepo: "",
+  originalRepo: "https://github.com/skvggor/mugdoc",
 };
