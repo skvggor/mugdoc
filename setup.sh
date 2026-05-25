@@ -256,16 +256,19 @@ readme_content_without_title() {
   local html_heading_close
   html_heading_close=$(grep -n '</h1>\|</h2>' "$readme_file" | head -1 | cut -d: -f1) || true
 
+  local html_block_start
+  html_block_start=$(grep -n '^<p' "$readme_file" | head -1 | cut -d: -f1) || true
+
   local html_block_end
   html_block_end=$(grep -n '^</p>' "$readme_file" | head -1 | cut -d: -f1) || true
 
-  if [ -n "$html_block_end" ] && [ -n "$html_heading_close" ]; then
+  if [ -n "$html_heading_close" ] && [ -n "$html_block_start" ] && [ -n "$html_block_end" ] && [ "$html_block_start" -lt "$html_heading_close" ]; then
     local max=$((html_block_end > html_heading_close ? html_block_end : html_heading_close))
     start_line=$((max + 1))
-  elif [ -n "$markdown_heading" ]; then
-    start_line=$((markdown_heading + 1))
   elif [ -n "$html_heading_close" ]; then
     start_line=$((html_heading_close + 1))
+  elif [ -n "$markdown_heading" ]; then
+    start_line=$((markdown_heading + 1))
   fi
 
   tail -n +"$start_line" "$readme_file" | sed '/\S/,$!d'
@@ -305,6 +308,14 @@ copy_readme_images() {
   done
 }
 
+convert_video_urls() {
+  local index_file="$1"
+
+  sed -i -E 's#^[[:space:]]*(https://github\.com/user-attachments/assets/[a-f0-9-]+)[[:space:]]*$#<video src="\1" controls muted playsinline style="max-width: 100%; border-radius: 8px;"></video>#' "$index_file"
+
+  sed -i -E 's#^[[:space:]]*(https?://[^ ]+\.(mp4|webm|mov))[[:space:]]*$#<video src="\1" controls muted playsinline style="max-width: 100%; border-radius: 8px;"></video>#' "$index_file"
+}
+
 generate_index() {
   local project_name="$1"
   local description="$2"
@@ -320,6 +331,7 @@ generate_index() {
   } > "$index_file"
 
   copy_readme_images "$index_file"
+  convert_video_urls "$index_file"
 }
 
 apply_config_placeholders() {
