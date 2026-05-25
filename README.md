@@ -84,6 +84,15 @@ Local images referenced in the README (both markdown and HTML `<img>` syntax) ar
 
 If the project has an `assets/` directory at the root, its contents are also copied.
 
+## Videos
+
+Bare video URLs in the README are automatically converted to `<video>` tags in the generated site. This covers:
+
+- GitHub user-attachment URLs (e.g. `https://github.com/user-attachments/assets/...`)
+- Direct links to `.mp4`, `.webm`, and `.mov` files
+
+On GitHub, pasting a video URL on its own line auto-embeds a player. Since Astro/Starlight doesn't do this, mugdoc handles the conversion during setup.
+
 ## Deploy
 
 The `--deploy` flag generates everything needed to deploy the docs site to a VPS using Docker, Caddy, and GitHub Actions.
